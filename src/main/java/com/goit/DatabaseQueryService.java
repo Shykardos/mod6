@@ -11,7 +11,7 @@ import java.util.List;
 public class DatabaseQueryService {
 
     public List<MaxProjectCountClient> findMaxProjectsClient() {
-        String queryFile = "src/main/resources/sql/find_max_projects_client.sql";
+        String queryFile = "find_max_projects_client.sql";
         String sqlQuery;
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(DatabaseQueryService.class.getResourceAsStream(queryFile), StandardCharsets.UTF_8))) {

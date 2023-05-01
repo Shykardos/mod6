@@ -8,7 +8,7 @@ public class Database {
     private static Database instance;
     private Connection connection;
 
-    private static final String DB_URL ="jdbc:h2:./test1";
+    private static final String DB_URL ="jdbc:h2:./test1" ;
 
 
     private static final String DB_USER = "admin1";

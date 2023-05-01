@@ -11,7 +11,7 @@ import java.sql.Statement;
 
 public class DatabasePopulateService {
     public static void main(String[] args) {
-        String populateSqlFile = "src/main/resources/sql/populate_db.sql";
+        String populateSqlFile = "populate_db.sql";
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(DatabasePopulateService.class.getResourceAsStream(populateSqlFile), StandardCharsets.UTF_8))) {
             StringBuilder sqlBuilder = new StringBuilder();

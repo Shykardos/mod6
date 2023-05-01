@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
 
 public class DatabaseInitService {
     public static void main(String[] args) {
-        String initSqlFile = "src/main/resources/sql/init_db.sql";
+        String initSqlFile = "init_db.sql";
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(DatabaseInitService.class.getResourceAsStream(initSqlFile), StandardCharsets.UTF_8))) {
             StringBuilder sqlBuilder = new StringBuilder();
