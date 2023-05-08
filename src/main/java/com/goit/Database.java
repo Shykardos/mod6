@@ -1,40 +1,88 @@
 package com.goit;
+import org.flywaydb.core.Flyway;
+import org.h2.jdbcx.JdbcDataSource;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
+import javax.sql.DataSource;
 
 public class Database {
     private static Database instance;
-    private Connection connection;
-
-    private static final String DB_URL ="jdbc:h2:./test1" ;
-
-
-    private static final String DB_USER = "admin1";
-    private static final String DB_PASSWORD = "12345";
+    private final JdbcDataSource dataSource;
 
     private Database() {
-        try {
-            Class.forName("org.h2.Driver");
-            connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-        } catch (ClassNotFoundException | SQLException e) {
-            throw new RuntimeException("Database connection failed!", e);
-        }
+        dataSource = new JdbcDataSource();
+        dataSource.setURL("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
+        dataSource.setUser("admin1");
+        dataSource.setPassword("12345");
+
+        configureFlyway();
     }
 
-    public static Database getInstance() {
+    public static synchronized Database getInstance() {
         if (instance == null) {
-            synchronized (Database.class) {
-                if (instance == null) {
-                    instance = new Database();
-                }
-            }
+            instance = new Database();
         }
         return instance;
     }
 
-    public Connection getConnection() {
-        return connection;
+    public Connection getConnection() throws SQLException {
+        return dataSource.getConnection();
+    }
+
+    private DataSource getDataSource() {
+        return dataSource;
+    }
+
+    private void configureFlyway() {
+        Flyway flyway = Flyway.configure()
+                .dataSource(getDataSource())
+                .locations("classpath:db/migration")
+                .load();
+        flyway.migrate();
     }
 }
+//
+//import org.flywaydb.core.Flyway;
+//import org.h2.jdbcx.JdbcDataSource;
+//
+//import java.sql.Connection;
+//import java.sql.SQLException;
+//import javax.sql.DataSource;
+//
+//public class Database {
+//    private static Database instance;
+//    private final JdbcDataSource dataSource;
+//
+//    private Database() {
+//        dataSource = new JdbcDataSource();
+//        dataSource.setURL("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
+//        dataSource.setUser("admin1");
+//        dataSource.setPassword("12345");
+//
+//        configureFlyway();
+//    }
+//
+//    public static synchronized Database getInstance() {
+//        if (instance == null) {
+//            instance = new Database();
+//        }
+//        return instance;
+//    }
+//
+//    public Connection getConnection() throws SQLException {
+//        return dataSource.getConnection();
+//    }
+//
+//    private DataSource getDataSource() {
+//        return dataSource;
+//    }
+//
+//    private void configureFlyway() {
+//        Flyway flyway = Flyway.configure()
+//                .dataSource(getDataSource())
+//                .locations("classpath:db/migration")
+//                .load();
+//        flyway.migrate();
+//    }
+//}
